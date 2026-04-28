@@ -115,23 +115,31 @@ const PORT_DOT = {
   brick:  '#b85040', ore:  '#9898b4',
 };
 
-function PortSign({ mx, my, nx, ny, portType }) {
+function PortSign({ p1, p2, mx, my, nx, ny, portType }) {
   const isGeneric = portType === '3:1';
   const dotColor  = isGeneric ? '#aaaaaa' : (PORT_DOT[portType] || '#999');
   const ratio     = isGeneric ? '3:1' : '2:1';
 
-  // Sign centre: 34px outward from coast midpoint (sits inside ocean hex)
-  const sx = mx + nx * 34;
-  const sy = my + ny * 34;
-  // Stick inner end: 14px from coast midpoint
-  const ex = mx + nx * 14;
-  const ey = my + ny * 14;
+  const sx = mx + nx * 46;
+  const sy = my + ny * 46;
+  const anchorX = mx + nx * 25;
+  const anchorY = my + ny * 25;
+  const coastP1 = { x: p1.x + nx * 2, y: p1.y + ny * 2 };
+  const coastP2 = { x: p2.x + nx * 2, y: p2.y + ny * 2 };
 
   return (
     <g>
-      {/* Brown stick connecting sign to coast */}
-      <line x1={sx} y1={sy} x2={ex} y2={ey}
-        stroke="#7a5020" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y}
+        stroke="#5f3f1c" strokeWidth="5" strokeLinecap="round" opacity="0.34" />
+      <path
+        d={`M ${coastP1.x} ${coastP1.y} L ${anchorX} ${anchorY} L ${coastP2.x} ${coastP2.y}`}
+        fill="none"
+        stroke="#7a5020"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx={anchorX} cy={anchorY} r="3.2" fill="#7a5020" />
       {/* White card – horizontal, always readable */}
       <rect x={sx - 20} y={sy - 13} width="40" height="26" rx="4"
         fill="#f8f4ec" stroke="#c0a870" strokeWidth="1.5" />
@@ -272,9 +280,16 @@ export default function Board({
         const p2 = toScreen(other.x, other.y);
         const mx = (p1.x + p2.x) / 2;
         const my = (p1.y + p2.y) / 2;
-        const dx = mx - CX, dy = my - CY;
-        const d  = Math.sqrt(dx * dx + dy * dy) || 1;
-        markers.push({ mx, my, nx: dx / d, ny: dy / d, portType: vertex.port });
+        const edgeDx = p2.x - p1.x;
+        const edgeDy = p2.y - p1.y;
+        const edgeLength = Math.sqrt(edgeDx * edgeDx + edgeDy * edgeDy) || 1;
+        let nx = -edgeDy / edgeLength;
+        let ny = edgeDx / edgeLength;
+        if (nx * (mx - CX) + ny * (my - CY) < 0) {
+          nx *= -1;
+          ny *= -1;
+        }
+        markers.push({ p1, p2, mx, my, nx, ny, portType: vertex.port });
       }
     }
     return markers;

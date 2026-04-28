@@ -1,4 +1,4 @@
-# Catan Online 🎲
+# Catan 🎲
 
 A beautiful, full-featured online multiplayer Settlers of Catan implementation.
 

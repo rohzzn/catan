@@ -16,12 +16,6 @@ export default function Lobby({ onAction }) {
 
         {/* ── Logo + Title ──────────────────────────────────────── */}
         <div className="lobby-logo">
-          <svg viewBox="0 0 72 64" width="60" height="54">
-            <polygon points="36,4 68,20 68,52 36,68 4,52 4,20"
-              fill="#d4a83c" stroke="#a07828" strokeWidth="1.5" />
-            <polygon points="36,12 60,26 60,52 36,60 12,52 12,26"
-              fill="#3d6e33" stroke="#2c5224" strokeWidth="1" />
-          </svg>
           <h1 className="lobby-title">Catan</h1>
           <p className="lobby-sub">Online Multiplayer</p>
         </div>
