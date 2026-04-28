@@ -33,6 +33,26 @@ Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
 Share your room code with friends. They open the same URL and join with the code.
 
+## Free Hosting
+
+The simplest free setup is one Render Web Service. It serves both the API and the built React client from the same URL.
+
+**Render settings:**
+
+```
+Build Command: npm run install:all && npm run build
+Start Command: npm start
+Health Check Path: /health
+```
+
+Add this environment variable:
+
+```
+NODE_ENV=production
+```
+
+Choose the Free instance type. Free services may sleep after inactivity, so the first load can take a minute.
+
 ## How to Play
 
 1. Create or join a game room

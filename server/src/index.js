@@ -2,20 +2,33 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { generateBoard } from './game/board.js';
 import { processAction, createDevDeck } from './game/logic.js';
 
 const app = express();
 const httpServer = createServer(app);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const configuredOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+const devOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+const corsOrigin =
+  process.env.NODE_ENV === 'production' && configuredOrigins.length === 0
+    ? true
+    : [...devOrigins, ...configuredOrigins];
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:3000'],
+    origin: corsOrigin,
     methods: ['GET', 'POST'],
   },
 });
 
-app.use(cors());
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
 
 app.get('/health', (_, res) => res.json({ ok: true }));
@@ -208,6 +221,14 @@ io.on('connection', (socket) => {
     }
   });
 });
+
+if (process.env.NODE_ENV === 'production') {
+  const clientDistPath = path.resolve(__dirname, '../../client/dist');
+  app.use(express.static(clientDistPath));
+  app.get('*', (_, res) => {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
