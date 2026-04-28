@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { generateBoard } from './game/board.js';
@@ -222,8 +223,10 @@ io.on('connection', (socket) => {
   });
 });
 
-if (process.env.NODE_ENV === 'production') {
-  const clientDistPath = path.resolve(__dirname, '../../client/dist');
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+const shouldServeClient = process.env.NODE_ENV === 'production' && fs.existsSync(path.join(clientDistPath, 'index.html'));
+
+if (shouldServeClient) {
   app.use(express.static(clientDistPath));
   app.get('*', (_, res) => {
     res.sendFile(path.join(clientDistPath, 'index.html'));
