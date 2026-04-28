@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from 'react';
 
+// Board tile images
+import woodForestImg from '../images/board/wood_forest.svg';
+import sheepPastureImg from '../images/board/sheep_pasture.svg';
+import wheatFieldsImg from '../images/board/wheat_fields.svg';
+import brickHillsImg from '../images/board/brick_hills.svg';
+import oreMountainsImg from '../images/board/ore_mountains.svg';
+import desertImg from '../images/board/desert.svg';
+
 const SQRT3 = Math.sqrt(3);
 
 // Coordinate system
@@ -11,7 +19,17 @@ const SVG_H = 800;
 const CX = SVG_W / 2;
 const CY = SVG_H / 2 + 10;
 
-// ─── Flat, solid tile colours (no gradients) ─────────────────────────────────
+// ─── Tile images map ──────────────────────────────────────────────────────────
+const TILE_IMAGE = {
+  forest:    woodForestImg,
+  pasture:   sheepPastureImg,
+  fields:    wheatFieldsImg,
+  hills:     brickHillsImg,
+  mountains: oreMountainsImg,
+  desert:    desertImg,
+};
+
+// ─── Fallback flat colours (used as background while image loads) ─────────────
 const TILE_FILL = {
   forest:    '#3d6e33',
   pasture:   '#93c76e',
@@ -50,7 +68,6 @@ for (let q = -3; q <= 3; q++) {
     }
   }
 }
-// Pre-compute screen centres for ocean tiles (no server coords needed)
 const OCEAN_CENTERS = OCEAN_RING.map(({ q, r }) => ({
   x: CX + CLIENT_SIZE * 1.5 * q,
   y: CY + CLIENT_SIZE * (SQRT3 / 2 * q + SQRT3 * r),
@@ -64,12 +81,11 @@ function hexPoints(cx, cy, size) {
   }).join(' ');
 }
 
-// Convert server coords → screen coords
 function toScreen(sx, sy) {
   return { x: CX + sx * SCALE, y: CY + sy * SCALE };
 }
 
-// ─── Number token (flat white circle) ────────────────────────────────────────
+// ─── Number token ─────────────────────────────────────────────────────────────
 function NumberToken({ x, y, number }) {
   const isHot  = number === 6 || number === 8;
   const dots   = [2,12].includes(number)?1:[3,11].includes(number)?2:[4,10].includes(number)?3:[5,9].includes(number)?4:5;
@@ -98,7 +114,7 @@ function NumberToken({ x, y, number }) {
   );
 }
 
-// ─── Robber (plain grey circle, exactly like the reference) ──────────────────
+// ─── Robber ───────────────────────────────────────────────────────────────────
 function Robber({ x, y }) {
   return (
     <g>
@@ -109,7 +125,7 @@ function Robber({ x, y }) {
   );
 }
 
-// ─── Port sign (always horizontal, always readable) ──────────────────────────
+// ─── Port sign ────────────────────────────────────────────────────────────────
 const PORT_DOT = {
   lumber: '#3d6e33', wool: '#93c76e', grain: '#d4a83c',
   brick:  '#b85040', ore:  '#9898b4',
@@ -140,16 +156,13 @@ function PortSign({ p1, p2, mx, my, nx, ny, portType }) {
         strokeLinejoin="round"
       />
       <circle cx={anchorX} cy={anchorY} r="3.2" fill="#7a5020" />
-      {/* White card – horizontal, always readable */}
       <rect x={sx - 20} y={sy - 13} width="40" height="26" rx="4"
         fill="#f8f4ec" stroke="#c0a870" strokeWidth="1.5" />
-      {/* Resource colour dot */}
       <circle cx={sx - 10} cy={sy} r="5" fill={dotColor} />
       {isGeneric && (
         <text x={sx - 10} y={sy + 1} textAnchor="middle" dominantBaseline="middle"
           fill="white" fontSize="5" fontWeight="700" fontFamily="Poppins, sans-serif">?</text>
       )}
-      {/* Ratio text */}
       <text x={sx + 2} y={sy + 1} textAnchor="start" dominantBaseline="middle"
         fill="#4a3018" fontSize="8.5" fontWeight="600" fontFamily="Poppins, sans-serif">
         {ratio}
@@ -196,7 +209,6 @@ export default function Board({
   const [hoveredEdge,   setHoveredEdge]   = useState(null);
   const [hoveredTile,   setHoveredTile]   = useState(null);
 
-  // Valid vertices for building
   const validVertices = useMemo(() => {
     if (!board || myIndex === null) return new Set();
     const set = new Set();
@@ -225,7 +237,6 @@ export default function Board({
     return set;
   }, [board, myIndex, phase, setupAction, currentPlayerIndex, buildMode]);
 
-  // Valid edges for roads
   const validEdges = useMemo(() => {
     if (!board || myIndex === null) return new Set();
     const set = new Set();
@@ -254,13 +265,11 @@ export default function Board({
     return set;
   }, [board, myIndex, phase, setupAction, currentPlayerIndex, players, buildMode, freeRoads]);
 
-  // Valid tiles for robber
   const validTiles = useMemo(() => {
     if (!board || !mustMoveRobber) return new Set();
     return new Set(board.tiles.filter(t => t.id !== board.robberTile).map(t => t.id));
   }, [board, mustMoveRobber]);
 
-  // Port sign positions: find adjacent vertex pairs sharing the same port type
   const portMarkers = useMemo(() => {
     if (!board) return [];
     const markers = [];
@@ -304,10 +313,22 @@ export default function Board({
       width="100%" height="100%"
       style={{ display: 'block', maxHeight: '100%' }}
     >
+      {/* ── Clip paths for all land tiles ───────────────────────────────── */}
+      <defs>
+        {tiles.map(tile => {
+          const { x: sx, y: sy } = toScreen(tile.x, tile.y);
+          return (
+            <clipPath key={`cp-${tile.id}`} id={`hex-clip-${tile.id}`}>
+              <polygon points={hexPoints(sx, sy, CLIENT_SIZE)} />
+            </clipPath>
+          );
+        })}
+      </defs>
+
       {/* Page background */}
       <rect width={SVG_W} height={SVG_H} fill={PAGE_BG} />
 
-      {/* ── Ocean ring (exactly 18 hexes at distance 3) ─────────────────── */}
+      {/* ── Ocean ring ──────────────────────────────────────────────────── */}
       {OCEAN_CENTERS.map(({ x, y }, i) => (
         <polygon key={`o${i}`}
           points={hexPoints(x, y, CLIENT_SIZE + 0.5)}
@@ -317,12 +338,13 @@ export default function Board({
         />
       ))}
 
-      {/* ── Land tiles (flat solid colour) ──────────────────────────────── */}
+      {/* ── Land tiles with image textures ──────────────────────────────── */}
       {tiles.map(tile => {
         const { x: sx, y: sy } = toScreen(tile.x, tile.y);
         const isValid   = validTiles.has(tile.id);
         const isHovered = hoveredTile === tile.id;
         const hasRobber = tile.id === robberTile;
+        const imgSrc    = TILE_IMAGE[tile.resource];
 
         return (
           <g key={tile.id}
@@ -331,18 +353,38 @@ export default function Board({
             onMouseLeave={() => setHoveredTile(null)}
             style={{ cursor: isValid ? 'pointer' : 'default' }}
           >
-            {/* Tile – flat fill, no gradient */}
+            {/* Fallback colour fill */}
             <polygon
               points={hexPoints(sx, sy, CLIENT_SIZE)}
               fill={TILE_FILL[tile.resource]}
+              stroke="none"
+            />
+
+            {/* SVG image texture clipped to hex shape */}
+            {imgSrc && (
+              <image
+                href={imgSrc}
+                x={sx - CLIENT_SIZE}
+                y={sy - CLIENT_SIZE}
+                width={CLIENT_SIZE * 2}
+                height={CLIENT_SIZE * 2}
+                clipPath={`url(#hex-clip-${tile.id})`}
+                preserveAspectRatio="xMidYMid slice"
+              />
+            )}
+
+            {/* Hex border */}
+            <polygon
+              points={hexPoints(sx, sy, CLIENT_SIZE)}
+              fill="none"
               stroke={TILE_STROKE[tile.resource]}
-              strokeWidth="2"
+              strokeWidth="2.5"
             />
 
             {/* Robber overlay */}
             {hasRobber && (
               <polygon points={hexPoints(sx, sy, CLIENT_SIZE)}
-                fill="rgba(0,0,0,0.22)" />
+                fill="rgba(0,0,0,0.30)" />
             )}
 
             {/* Robber-target highlight */}

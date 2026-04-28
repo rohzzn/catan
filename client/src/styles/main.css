@@ -232,7 +232,7 @@ select { font-family: inherit; font-size: inherit; }
 .game-layout {
   width: 100%; height: 100vh;
   display: grid;
-  grid-template-columns: 220px 1fr 236px;
+  grid-template-columns: 244px 1fr 236px;
   overflow: hidden;
 }
 
@@ -241,7 +241,7 @@ select { font-family: inherit; font-size: inherit; }
   background: var(--bg2);
   border-right: 1.5px solid var(--border2);
   display: flex; flex-direction: column;
-  overflow-y: auto; overflow-x: hidden;
+  overflow: hidden;
 }
 .sidebar-left::-webkit-scrollbar { width: 4px; }
 .sidebar-left::-webkit-scrollbar-track { background: transparent; }
@@ -268,16 +268,28 @@ select { font-family: inherit; font-size: inherit; }
 }
 
 .players-list {
-  display: flex; flex-direction: column; gap: 5px; padding: 8px; flex: 1;
+  display: flex; flex-direction: column; gap: 5px; padding: 8px;
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  min-height: 0;
 }
+.players-list::-webkit-scrollbar { width: 3px; }
+.players-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
 .deck-info {
-  padding: 10px 14px; border-top: 1.5px solid var(--border2);
-  font-size: 0.74rem; color: var(--text-dim);
+  padding: 8px 12px; border-top: 1.5px solid var(--border2);
+  font-size: 0.73rem; color: var(--text-dim);
   display: flex; flex-direction: column; gap: 4px;
-  background: var(--bg3);
+  background: var(--bg3); flex-shrink: 0;
 }
 .special-card { color: var(--gold); font-weight: 700; font-size: 0.72rem; }
+
+/* ── My player section (pinned to bottom) ─────────────────────────────────── */
+.my-player-section {
+  border-top: 2px solid var(--gold-border);
+  background: var(--bg3);
+  padding: 8px;
+  flex-shrink: 0;
+}
 
 /* Board area */
 .board-area {
@@ -318,7 +330,7 @@ select { font-family: inherit; font-size: inherit; }
 /* ===================== PLAYER HUD ===================== */
 .player-hud {
   background: var(--card); border: 1.5px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 9px 11px;
+  border-radius: var(--radius-sm); padding: 8px 10px;
   transition: all 0.2s;
   box-shadow: var(--shadow-sm);
 }
@@ -327,7 +339,11 @@ select { font-family: inherit; font-size: inherit; }
   border-color: var(--gold-border);
   box-shadow: 0 2px 10px rgba(154,106,24,0.18);
 }
-.player-hud.me { border-left: 3px solid var(--gold); }
+.player-hud.me {
+  border-left: 3px solid var(--gold);
+  background: var(--card);
+  border-radius: var(--radius);
+}
 
 .hud-header {
   display: flex; align-items: center; gap: 6px;
@@ -357,19 +373,74 @@ select { font-family: inherit; font-size: inherit; }
 .vp-star { font-size: 0.72rem; opacity: 0.7; }
 .hidden-vp { color: var(--text-muted); font-size: 0.7rem; font-style: italic; }
 
-.hud-resources {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-bottom: 5px;
+/* ── Resource section label ────────────────────────────────────────────────── */
+.hud-resources-label {
+  font-size: 0.62rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 4px;
 }
-.resource-chip {
-  display: flex; flex-direction: column; align-items: center;
-  background: var(--bg3); border: 1.5px solid var(--border);
-  border-radius: 5px; padding: 4px 2px; transition: all 0.15s;
-}
-.resource-chip.empty { opacity: 0.28; }
-.resource-chip:not(.empty) { border-color: var(--border2); background: var(--bg4); }
-.res-icon { font-size: 0.85rem; }
-.res-count { font-size: 0.78rem; font-weight: 800; color: var(--text); }
 
+/* ── Resource cards (image-based, for "me" view) ──────────────────────────── */
+.hud-resources {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 6px;
+}
+
+.resource-card {
+  display: flex; flex-direction: column; align-items: stretch;
+  background: var(--bg4); border: 1.5px solid var(--border2);
+  border-radius: 7px; overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.resource-card:not(.empty):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(80,55,25,0.22);
+}
+.resource-card.empty {
+  opacity: 0.30;
+  border-color: var(--border);
+}
+.res-card-img {
+  width: 100%; aspect-ratio: 3/4;
+  object-fit: cover; display: block;
+}
+.res-card-count {
+  position: absolute; bottom: 3px; right: 4px;
+  background: rgba(46, 30, 14, 0.88);
+  color: #fff;
+  font-size: 0.72rem; font-weight: 900;
+  min-width: 17px; height: 17px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+}
+.resource-card:not(.empty) .res-card-count {
+  background: rgba(46, 30, 14, 0.88);
+}
+
+/* ── Dev card thumbnails ──────────────────────────────────────────────────── */
+.hud-dev-cards {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px;
+}
+.dev-card-thumb {
+  position: relative; width: 36px;
+  border-radius: 5px; overflow: hidden;
+  border: 1.5px solid var(--border2);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+.dev-thumb-img {
+  width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block;
+}
+.dev-thumb-count {
+  position: absolute; bottom: 2px; right: 2px;
+  background: rgba(46,30,14,0.85); color: #fff;
+  font-size: 0.62rem; font-weight: 900;
+  padding: 1px 4px; border-radius: 6px; line-height: 1;
+}
+
+/* ── Other players: hidden resources ─────────────────────────────────────── */
 .hud-resources-hidden {
   display: flex; align-items: center; gap: 8px;
   color: var(--text-dim); font-size: 0.78rem; margin-bottom: 5px;
@@ -378,23 +449,35 @@ select { font-family: inherit; font-size: inherit; }
 .card-count { font-weight: 700; }
 .dev-count { color: var(--gold); font-size: 0.72rem; font-weight: 700; }
 
-.hud-build-status { display: flex; gap: 4px; margin-bottom: 5px; }
+/* ── Build affordability indicators ─────────────────────────────────────── */
+.hud-build-status {
+  display: flex; gap: 4px; margin-bottom: 5px;
+}
 .build-indicator {
-  width: 22px; height: 22px; border-radius: 4px;
+  width: 24px; height: 24px; border-radius: 5px;
   display: flex; align-items: center; justify-content: center;
   background: var(--bg3); border: 1.5px solid var(--border);
-  font-size: 0.76rem; opacity: 0.28;
+  font-size: 0.8rem; opacity: 0.25;
 }
 .build-indicator.can-build {
   opacity: 1;
-  background: rgba(58,120,72,0.08); border-color: rgba(58,120,72,0.3);
+  background: rgba(58,120,72,0.10); border-color: rgba(58,120,72,0.35);
+  box-shadow: 0 0 0 1px rgba(58,120,72,0.15);
 }
 
+/* ── Stats row ────────────────────────────────────────────────────────────── */
 .hud-stats {
   display: flex; gap: 7px; flex-wrap: wrap;
   color: var(--text-dim); font-size: 0.72rem; font-weight: 600;
+  align-items: center;
 }
-.special-badge { color: var(--gold); font-weight: 800; }
+.special-badge {
+  color: var(--gold); font-weight: 800;
+  display: flex; align-items: center; gap: 3px;
+}
+.special-card-img {
+  width: 14px; height: auto; object-fit: contain;
+}
 
 /* ===================== ACTION PANEL ===================== */
 .action-panel {
@@ -705,23 +788,32 @@ select { font-family: inherit; font-size: inherit; }
 .dev-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .dev-card {
   background: var(--bg3); border: 1.5px solid var(--border2);
-  border-radius: var(--radius-sm); padding: 11px;
+  border-radius: var(--radius-sm); overflow: hidden;
   cursor: pointer; transition: all 0.18s;
-  display: flex; flex-direction: column; gap: 4px; position: relative;
+  display: flex; flex-direction: column; gap: 0; position: relative;
+  box-shadow: var(--shadow-sm);
 }
-.dev-card:hover { background: var(--bg4); border-color: var(--border3); }
+.dev-card:hover { border-color: var(--border3); transform: translateY(-2px); box-shadow: var(--shadow); }
 .dev-card.selected {
-  background: rgba(154,106,24,0.08); border-color: var(--gold);
-  box-shadow: 0 0 0 2px var(--gold-bg);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold-bg), var(--shadow);
 }
 .dev-card.vp-card { cursor: default; opacity: 0.6; }
-.dev-card-icon { font-size: 1.4rem; }
-.dev-card-label { font-weight: 800; font-size: 0.80rem; color: var(--text); }
-.dev-card-desc { font-size: 0.70rem; color: var(--text-dim); line-height: 1.4; }
+.dev-card-art {
+  width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
+}
+.dev-card-label {
+  font-weight: 800; font-size: 0.76rem; color: var(--text);
+  padding: 5px 8px 1px;
+}
+.dev-card-desc {
+  font-size: 0.66rem; color: var(--text-dim); line-height: 1.4;
+  padding: 0 8px 7px;
+}
 .dev-card-count {
   position: absolute; top: 6px; right: 7px;
-  background: var(--text); color: var(--bg3);
-  font-size: 0.62rem; font-weight: 900; padding: 2px 5px; border-radius: 8px;
+  background: rgba(46,30,14,0.82); color: #fff;
+  font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 8px;
 }
 
 .dev-params { margin-top: 10px; display: flex; flex-direction: column; gap: 7px; }

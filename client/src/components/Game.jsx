@@ -190,7 +190,7 @@ export default function Game({ gameState, playerId, roomCode, onAction, onStart,
 
   return (
     <div className="game-layout">
-      {/* Left sidebar — player panels */}
+      {/* Left sidebar — other players on top, my panel pinned to bottom */}
       <div className="sidebar-left">
         <div className="game-header-mini">
           <span className="room-tag">#{roomCode}</span>
@@ -199,18 +199,22 @@ export default function Game({ gameState, playerId, roomCode, onAction, onStart,
           </span>
         </div>
 
+        {/* Other players (compact) */}
         <div className="players-list">
-          {players.map((p, i) => (
-            <PlayerHUD
-              key={p.id}
-              player={p}
-              isMe={p.id === playerId}
-              isCurrentTurn={i === currentPlayer}
-            />
-          ))}
+          {players.map((p, i) => {
+            if (p.id === playerId) return null;
+            return (
+              <PlayerHUD
+                key={p.id}
+                player={p}
+                isMe={false}
+                isCurrentTurn={i === currentPlayer}
+              />
+            );
+          })}
         </div>
 
-        {/* Dev card deck count */}
+        {/* Dev card deck + special cards */}
         <div className="deck-info">
           <span>Dev Deck: {gameState.devCardDeck?.length ?? 0} cards</span>
           {gameState.longestRoadOwner !== null && (
@@ -224,6 +228,17 @@ export default function Game({ gameState, playerId, roomCode, onAction, onStart,
             </div>
           )}
         </div>
+
+        {/* My player panel — pinned to bottom */}
+        {myIndex !== -1 && players[myIndex] && (
+          <div className="my-player-section">
+            <PlayerHUD
+              player={players[myIndex]}
+              isMe={true}
+              isCurrentTurn={currentPlayer === myIndex}
+            />
+          </div>
+        )}
       </div>
 
       {/* Center — board */}

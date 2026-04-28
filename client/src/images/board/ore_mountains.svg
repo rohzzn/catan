@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="ore mountain terrain hex">
+  <defs>
+    <clipPath id="hexClip">
+      <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00"/>
+    </clipPath>
+    <linearGradient id="goldBorder" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6d47a"/>
+      <stop offset="42%" stop-color="#d9a94e"/>
+      <stop offset="100%" stop-color="#b98536"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    
+  </defs>
+
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="url(#goldBorder)" stroke="#8f672b" stroke-width="3" filter="url(#softShadow)"/>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="#7a8486" stroke="#fff0b5" stroke-width="5"/>
+  <g clip-path="url(#hexClip)">
+    <rect width="512" height="512" fill="#7a8486"/>
+    
+    <rect width="512" height="512" fill="#7a8486"/>
+    <path d="M0 160 C80 120 155 132 235 152 C320 175 405 125 512 150 L512 512 L0 512 Z" fill="#9aa2a3"/>
+    <path d="M58 380 L138 135 L225 382 Z" fill="#4d5558"/>
+    <path d="M185 395 L286 87 L405 395 Z" fill="#2f373a"/>
+    <path d="M330 390 L404 168 L500 390 Z" fill="#596163"/>
+    <path d="M205 390 L270 190 L338 390 Z" fill="#626b6e"/>
+    <path d="M286 87 L326 388 L405 395 Z" fill="#20272a" opacity=".55"/>
+    <path d="M138 135 L175 382 L225 382 Z" fill="#263033" opacity=".45"/>
+    <path d="M286 87 L242 235 L310 215 Z" fill="#d7dddb"/>
+    <path d="M138 135 L111 228 L165 211 Z" fill="#d5dbd9"/>
+    <path d="M404 168 L377 255 L433 245 Z" fill="#d0d6d5"/>
+    <path d="M0 405 C82 350 158 392 238 348 C320 302 412 372 512 320 L512 512 L0 512 Z" fill="#535a5c"/>
+    <g stroke="#f0d084" stroke-width="3" fill="none" opacity=".85">
+      <path d="M286 87 L185 395 M286 87 L405 395 M138 135 L58 380 M138 135 L225 382 M404 168 L330 390 M404 168 L500 390"/>
+      <path d="M0 405 C82 350 158 392 238 348 C320 302 412 372 512 320"/>
+    </g>
+    <g fill="#2f3435" stroke="#d2d6d4" stroke-width="2">
+      <path d="M120 355 L170 330 L208 362 L188 418 L130 418 Z"/>
+      <path d="M300 340 L365 315 L416 360 L397 430 L320 430 Z"/>
+      <path d="M215 412 L272 386 L332 422 L318 470 L230 468 Z"/>
+    </g>
+    <g fill="#d5a33f">
+      <circle cx="154" cy="368" r="5"/><circle cx="170" cy="386" r="4"/><circle cx="334" cy="354" r="5"/>
+      <circle cx="366" cy="381" r="5"/><circle cx="274" cy="420" r="5"/><circle cx="298" cy="443" r="4"/>
+      <circle cx="236" cy="442" r="4"/>
+    </g>
+    <g stroke="#7e925d" stroke-width="5" stroke-linecap="round">
+      <path d="M96 430 l-14 25 M96 430 l6 27 M96 430 l24 18"/>
+      <path d="M416 438 l-13 24 M416 438 l7 27 M416 438 l24 17"/>
+    </g>
+    
+  </g>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="none" stroke="#f7e5a4" stroke-width="4"/>
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="none" stroke="#a9792e" stroke-width="2"/>
+</svg>

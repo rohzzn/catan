@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="sheep pasture terrain hex">
+  <defs>
+    <clipPath id="hexClip">
+      <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00"/>
+    </clipPath>
+    <linearGradient id="goldBorder" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6d47a"/>
+      <stop offset="42%" stop-color="#d9a94e"/>
+      <stop offset="100%" stop-color="#b98536"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    
+  </defs>
+
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="url(#goldBorder)" stroke="#8f672b" stroke-width="3" filter="url(#softShadow)"/>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="#bde87a" stroke="#fff0b5" stroke-width="5"/>
+  <g clip-path="url(#hexClip)">
+    <rect width="512" height="512" fill="#bde87a"/>
+    
+    <rect width="512" height="512" fill="#bde87a"/>
+    <path d="M0 160 C85 110 165 130 235 155 C315 185 405 120 512 155 L512 512 L0 512 Z" fill="#8ccc47"/>
+    <path d="M0 215 C88 160 160 210 250 175 C330 142 405 200 512 168 L512 512 L0 512 Z" fill="#6fbd35"/>
+    <path d="M0 305 C88 255 175 297 250 260 C335 220 410 275 512 242 L512 512 L0 512 Z" fill="#75c43a"/>
+    <path d="M0 405 C90 330 190 368 268 327 C352 285 425 348 512 310 L512 512 L0 512 Z" fill="#5fae32"/>
+    <g stroke="#f3d47a" stroke-width="3" fill="none">
+      <path d="M0 215 C88 160 160 210 250 175 C330 142 405 200 512 168"/>
+      <path d="M0 305 C88 255 175 297 250 260 C335 220 410 275 512 242"/>
+      <path d="M0 405 C90 330 190 368 268 327 C352 285 425 348 512 310"/>
+    </g>
+
+    <g fill="#105f31">
+      <path d="M82 168 L63 230 H101 Z"/><path d="M425 160 L402 240 H448 Z"/>
+      <path d="M385 178 L368 235 H402 Z"/>
+    </g>
+    <g stroke="#f1d07c" stroke-width="3" fill="#3f962e">
+      <path d="M54 262 C31 258 13 275 13 297 C13 327 42 342 65 325 C84 349 123 333 119 301 C143 286 132 253 103 251 C94 230 60 239 54 262Z"/>
+      <path d="M400 300 C377 294 359 314 361 337 C364 363 390 376 410 357 C430 382 469 363 462 332 C485 315 470 282 442 284 C431 263 397 275 400 300Z"/>
+    </g>
+    <g>
+      <ellipse cx="138" cy="350" rx="55" ry="31" fill="#f4e8b9"/>
+      <circle cx="99" cy="335" r="24" fill="#f8edc6"/><circle cx="124" cy="323" r="26" fill="#fff0c8"/>
+      <circle cx="151" cy="326" r="26" fill="#fae9b8"/><circle cx="178" cy="340" r="23" fill="#f9e9bd"/>
+      <ellipse cx="190" cy="365" rx="17" ry="20" fill="#6b4a25"/>
+      <circle cx="197" cy="354" r="6" fill="#4a321b"/>
+      <rect x="100" y="375" width="9" height="35" rx="4" fill="#5a3a1e"/>
+      <rect x="137" y="378" width="9" height="35" rx="4" fill="#5a3a1e"/>
+      <rect x="168" y="374" width="9" height="35" rx="4" fill="#5a3a1e"/>
+    </g>
+    <g transform="translate(305 240) scale(.68)">
+      <ellipse cx="138" cy="350" rx="55" ry="31" fill="#f4e8b9"/>
+      <circle cx="99" cy="335" r="24" fill="#f8edc6"/><circle cx="124" cy="323" r="26" fill="#fff0c8"/>
+      <circle cx="151" cy="326" r="26" fill="#fae9b8"/><circle cx="178" cy="340" r="23" fill="#f9e9bd"/>
+      <ellipse cx="190" cy="365" rx="17" ry="20" fill="#6b4a25"/>
+      <rect x="100" y="375" width="9" height="35" rx="4" fill="#5a3a1e"/><rect x="137" y="378" width="9" height="35" rx="4" fill="#5a3a1e"/>
+    </g>
+    <g transform="translate(120 45) scale(.55)">
+      <ellipse cx="138" cy="350" rx="55" ry="31" fill="#f4e8b9"/>
+      <circle cx="99" cy="335" r="24" fill="#f8edc6"/><circle cx="124" cy="323" r="26" fill="#fff0c8"/>
+      <circle cx="151" cy="326" r="26" fill="#fae9b8"/><circle cx="178" cy="340" r="23" fill="#f9e9bd"/>
+      <ellipse cx="190" cy="365" rx="17" ry="20" fill="#6b4a25"/>
+      <rect x="100" y="375" width="9" height="35" rx="4" fill="#5a3a1e"/><rect x="137" y="378" width="9" height="35" rx="4" fill="#5a3a1e"/>
+    </g>
+    <g fill="#f7f2cc">
+      <circle cx="87" cy="309" r="4"/><circle cx="106" cy="400" r="4"/><circle cx="350" cy="323" r="4"/><circle cx="425" cy="384" r="4"/>
+    </g>
+    <g stroke="#dbea64" stroke-width="4" stroke-linecap="round">
+      <path d="M78 426 l-9 18 M78 426 l4 18 M78 426 l14 14"/>
+      <path d="M263 417 l-9 18 M263 417 l4 18 M263 417 l14 14"/>
+      <path d="M415 433 l-9 18 M415 433 l4 18 M415 433 l14 14"/>
+    </g>
+    
+  </g>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="none" stroke="#f7e5a4" stroke-width="4"/>
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="none" stroke="#a9792e" stroke-width="2"/>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="brick hills terrain hex">
+  <defs>
+    <clipPath id="hexClip">
+      <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00"/>
+    </clipPath>
+    <linearGradient id="goldBorder" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6d47a"/>
+      <stop offset="42%" stop-color="#d9a94e"/>
+      <stop offset="100%" stop-color="#b98536"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    
+  </defs>
+
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="url(#goldBorder)" stroke="#8f672b" stroke-width="3" filter="url(#softShadow)"/>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="#e86b25" stroke="#fff0b5" stroke-width="5"/>
+  <g clip-path="url(#hexClip)">
+    <rect width="512" height="512" fill="#e86b25"/>
+    
+    <rect width="512" height="512" fill="#e86b25"/>
+    <path d="M0 150 C100 90 185 140 260 130 C350 118 420 145 512 120 L512 512 L0 512 Z" fill="#de5a20"/>
+    <path d="M0 245 C65 210 130 230 184 192 C250 150 322 208 390 175 C445 150 485 168 512 152 L512 512 L0 512 Z" fill="#cf491d"/>
+    <path d="M0 370 C90 315 155 358 240 310 C326 260 410 332 512 285 L512 512 L0 512 Z" fill="#f07527"/>
+    <path d="M70 250 L143 222 L208 240 L194 330 L105 345 Z" fill="#a83b1c"/>
+    <path d="M310 236 L386 215 L450 240 L433 320 L335 338 Z" fill="#b4411c"/>
+    <path d="M70 250 L143 222 L208 240" fill="none" stroke="#ffad55" stroke-width="4"/>
+    <path d="M310 236 L386 215 L450 240" fill="none" stroke="#ffad55" stroke-width="4"/>
+    <g stroke="#ffb257" stroke-width="3" fill="none" opacity=".75">
+      <path d="M0 245 C65 210 130 230 184 192 C250 150 322 208 390 175 C445 150 485 168 512 152"/>
+      <path d="M0 370 C90 315 155 358 240 310 C326 260 410 332 512 285"/>
+      <path d="M35 420 C110 382 196 405 260 375 C342 335 430 385 512 340"/>
+    </g>
+    <g fill="#f29338" stroke="#9a3517" stroke-width="3">
+      <rect x="98" y="340" width="42" height="24" rx="3"/>
+      <rect x="145" y="340" width="42" height="24" rx="3"/>
+      <rect x="122" y="312" width="42" height="24" rx="3"/>
+      <rect x="350" y="342" width="42" height="24" rx="3"/>
+      <rect x="397" y="342" width="42" height="24" rx="3"/>
+      <rect x="374" y="314" width="42" height="24" rx="3"/>
+      <rect x="260" y="250" width="42" height="24" rx="3"/>
+    </g>
+    <g fill="#8f6c27">
+      <path d="M48 395 C74 370 110 382 117 414 C88 424 66 418 48 395Z"/>
+      <path d="M392 410 C420 385 455 398 464 428 C432 438 409 432 392 410Z"/>
+      <path d="M78 165 C107 138 146 150 158 184 C126 194 102 188 78 165Z"/>
+    </g>
+    <g stroke="#8c6a22" stroke-width="5" stroke-linecap="round">
+      <path d="M60 420 l-18 27 M60 420 l10 32 M60 420 l28 18"/>
+      <path d="M430 426 l-20 28 M430 426 l12 31 M430 426 l28 15"/>
+    </g>
+    
+  </g>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="none" stroke="#f7e5a4" stroke-width="4"/>
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="none" stroke="#a9792e" stroke-width="2"/>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="wood forest terrain hex">
+  <defs>
+    <clipPath id="hexClip">
+      <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00"/>
+    </clipPath>
+    <linearGradient id="goldBorder" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6d47a"/>
+      <stop offset="42%" stop-color="#d9a94e"/>
+      <stop offset="100%" stop-color="#b98536"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    
+  </defs>
+
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="url(#goldBorder)" stroke="#8f672b" stroke-width="3" filter="url(#softShadow)"/>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="#5aa13f" stroke="#fff0b5" stroke-width="5"/>
+  <g clip-path="url(#hexClip)">
+    <rect width="512" height="512" fill="#5aa13f"/>
+    
+    <rect width="512" height="512" fill="#5aa13f"/>
+    <path d="M0 130 C90 80 180 95 260 125 C340 155 410 90 512 130 L512 512 L0 512 Z" fill="#6bad4e"/>
+    <path d="M0 175 C100 120 175 175 260 152 C340 130 410 155 512 122 L512 512 L0 512 Z" fill="#448d39"/>
+    <path d="M0 344 C75 280 145 315 216 286 C300 250 370 285 512 236 L512 512 L0 512 Z" fill="#2f7a34"/>
+    <path d="M0 400 C85 342 165 366 236 330 C315 291 393 345 512 286 L512 512 L0 512 Z" fill="#3f9633"/>
+
+    <g stroke="#f4d47c" stroke-width="3" stroke-linejoin="round">
+      <path d="M246 96 L210 165 H229 L194 230 H218 L185 294 H306 L273 230 H297 L262 165 H282 Z" fill="#064f2c"/>
+      <path d="M330 128 L300 188 H317 L287 246 H306 L276 302 H384 L354 246 H373 L343 188 H360 Z" fill="#0a6233"/>
+      <path d="M166 118 L139 177 H156 L128 235 H146 L116 292 H218 L190 235 H207 L179 177 H194 Z" fill="#0a6a39"/>
+      <path d="M405 158 L382 210 H397 L374 260 H389 L365 307 H450 L427 260 H442 L419 210 H432 Z" fill="#0b6b37"/>
+    </g>
+    <g stroke="#eec56b" stroke-width="3" stroke-linecap="round">
+      <path d="M118 323 C88 318 68 340 68 365 C68 397 96 414 124 398 C144 426 189 409 184 370 C211 354 200 312 166 306 C155 277 112 285 118 323Z" fill="#6bae36"/>
+      <path d="M360 330 C334 325 318 345 318 368 C318 392 340 408 363 394 C381 418 420 402 416 370 C440 355 430 319 399 314 C389 289 352 298 360 330Z" fill="#78b43a"/>
+      <path d="M246 354 C224 350 211 366 211 385 C211 405 229 418 248 406 C263 424 295 411 292 384 C312 372 303 343 277 339 C269 318 238 326 246 354Z" fill="#6fae35"/>
+    </g>
+    <g stroke="#8c5f21" stroke-width="7" stroke-linecap="round">
+      <path d="M130 348 L130 430"/>
+      <path d="M371 350 L371 430"/>
+      <path d="M252 378 L252 437"/>
+    </g>
+    <g stroke="#f4d47c" stroke-width="3" stroke-linecap="round">
+      <path d="M130 365 L99 340 M130 372 L164 344 M130 390 L101 384 M130 398 L163 390"/>
+      <path d="M371 368 L342 348 M371 378 L400 349 M371 394 L344 390 M371 400 L398 392"/>
+      <path d="M252 390 L230 374 M252 398 L275 376 M252 411 L230 409 M252 415 L273 411"/>
+    </g>
+    <g fill="#f0bd3d">
+      <circle cx="70" cy="380" r="6"/><circle cx="84" cy="365" r="6"/><circle cx="95" cy="382" r="6"/>
+      <circle cx="424" cy="384" r="6"/><circle cx="438" cy="366" r="6"/><circle cx="451" cy="386" r="6"/>
+    </g>
+    
+  </g>
+  <polygon points="256.00,42.00 441.33,149.00 441.33,363.00 256.00,470.00 70.67,363.00 70.67,149.00" fill="none" stroke="#f7e5a4" stroke-width="4"/>
+  <polygon points="256.00,20.00 460.38,138.00 460.38,374.00 256.00,492.00 51.62,374.00 51.62,138.00" fill="none" stroke="#a9792e" stroke-width="2"/>
+</svg>
