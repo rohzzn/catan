@@ -1,13 +1,5 @@
 import React, { useMemo, useState } from 'react';
 
-// Board tile images
-import woodForestImg from '../images/board/wood_forest.svg';
-import sheepPastureImg from '../images/board/sheep_pasture.svg';
-import wheatFieldsImg from '../images/board/wheat_fields.svg';
-import brickHillsImg from '../images/board/brick_hills.svg';
-import oreMountainsImg from '../images/board/ore_mountains.svg';
-import desertImg from '../images/board/desert.svg';
-
 const SQRT3 = Math.sqrt(3);
 
 // Coordinate system
@@ -19,17 +11,7 @@ const SVG_H = 800;
 const CX = SVG_W / 2;
 const CY = SVG_H / 2 + 10;
 
-// ─── Tile images map ──────────────────────────────────────────────────────────
-const TILE_IMAGE = {
-  forest:    woodForestImg,
-  pasture:   sheepPastureImg,
-  fields:    wheatFieldsImg,
-  hills:     brickHillsImg,
-  mountains: oreMountainsImg,
-  desert:    desertImg,
-};
-
-// ─── Fallback flat colours (used as background while image loads) ─────────────
+// ─── Tile colours ────────────────────────────────────────────────────────────
 const TILE_FILL = {
   forest:    '#3d6e33',
   pasture:   '#93c76e',
@@ -313,18 +295,6 @@ export default function Board({
       width="100%" height="100%"
       style={{ display: 'block', maxHeight: '100%' }}
     >
-      {/* ── Clip paths for all land tiles ───────────────────────────────── */}
-      <defs>
-        {tiles.map(tile => {
-          const { x: sx, y: sy } = toScreen(tile.x, tile.y);
-          return (
-            <clipPath key={`cp-${tile.id}`} id={`hex-clip-${tile.id}`}>
-              <polygon points={hexPoints(sx, sy, CLIENT_SIZE)} />
-            </clipPath>
-          );
-        })}
-      </defs>
-
       {/* Page background */}
       <rect width={SVG_W} height={SVG_H} fill={PAGE_BG} />
 
@@ -338,13 +308,12 @@ export default function Board({
         />
       ))}
 
-      {/* ── Land tiles with image textures ──────────────────────────────── */}
+      {/* ── Land tiles ──────────────────────────────────────────────────── */}
       {tiles.map(tile => {
         const { x: sx, y: sy } = toScreen(tile.x, tile.y);
         const isValid   = validTiles.has(tile.id);
         const isHovered = hoveredTile === tile.id;
         const hasRobber = tile.id === robberTile;
-        const imgSrc    = TILE_IMAGE[tile.resource];
 
         return (
           <g key={tile.id}
@@ -353,25 +322,11 @@ export default function Board({
             onMouseLeave={() => setHoveredTile(null)}
             style={{ cursor: isValid ? 'pointer' : 'default' }}
           >
-            {/* Fallback colour fill */}
             <polygon
               points={hexPoints(sx, sy, CLIENT_SIZE)}
               fill={TILE_FILL[tile.resource]}
               stroke="none"
             />
-
-            {/* SVG image texture clipped to hex shape */}
-            {imgSrc && (
-              <image
-                href={imgSrc}
-                x={sx - CLIENT_SIZE}
-                y={sy - CLIENT_SIZE}
-                width={CLIENT_SIZE * 2}
-                height={CLIENT_SIZE * 2}
-                clipPath={`url(#hex-clip-${tile.id})`}
-                preserveAspectRatio="xMidYMid slice"
-              />
-            )}
 
             {/* Hex border */}
             <polygon

@@ -1,35 +1,19 @@
 import React from 'react';
 
-// Resource card images
-import woodImg   from '../images/wood_resource.png';
-import brickImg  from '../images/brick_resource.png';
-import oreImg    from '../images/ore_resource.png';
-import wheatImg  from '../images/wheat_resource.png';
-import woolImg   from '../images/wool_resource.png';
-
-// Dev card images
-import knightImg       from '../images/devcards/knight.png';
-import monopolyImg     from '../images/devcards/Monopoly.png';
-import roadBuildImg    from '../images/devcards/road_building.png';
-import vpImg           from '../images/devcards/VP.png';
-import yearPlentyImg   from '../images/devcards/YearofPlenty.png';
-import largestArmyImg  from '../images/Largest_Army.png';
-import longestRoadImg  from '../images/Longest_Road.png';
-
 const RES_DATA = {
-  wood:  { img: woodImg,  label: 'Wood',  color: '#3d8c3d' },
-  brick: { img: brickImg, label: 'Brick', color: '#c84b30' },
-  ore:   { img: oreImg,   label: 'Ore',   color: '#6b5d7a' },
-  wheat: { img: wheatImg, label: 'Wheat', color: '#d4a017' },
-  sheep: { img: woolImg,  label: 'Sheep', color: '#6ab04c' },
+  wood:  { icon: '🪵', label: 'Wood',  color: '#3d8c3d' },
+  brick: { icon: '🧱', label: 'Brick', color: '#c84b30' },
+  ore:   { icon: '⛏️', label: 'Ore',   color: '#6b5d7a' },
+  wheat: { icon: '🌾', label: 'Wheat', color: '#d4a017' },
+  sheep: { icon: '🐑', label: 'Sheep', color: '#6ab04c' },
 };
 
 const DEV_CARD_DATA = {
-  knight:         { img: knightImg,     label: 'Knight' },
-  road_building:  { img: roadBuildImg,  label: 'Road Building' },
-  year_of_plenty: { img: yearPlentyImg, label: 'Year of Plenty' },
-  monopoly:       { img: monopolyImg,   label: 'Monopoly' },
-  vp:             { img: vpImg,         label: 'Victory Point' },
+  knight:         { icon: '⚔️', label: 'Knight' },
+  road_building:  { icon: '🛤️', label: 'Road Building' },
+  year_of_plenty: { icon: '🎁', label: 'Year of Plenty' },
+  monopoly:       { icon: '💰', label: 'Monopoly' },
+  vp:             { icon: '⭐', label: 'Victory Point' },
 };
 
 const PLAYER_COLORS = {
@@ -90,7 +74,7 @@ export default function PlayerHUD({ player, isMe, isCurrentTurn }) {
         {/* Resource cards with images */}
         <div className="hud-resources-label">Resources</div>
         <div className="hud-resources">
-          {Object.entries(RES_DATA).map(([res_name, { img, label, color: rc }]) => {
+          {Object.entries(RES_DATA).map(([res_name, { icon, label, color: rc }]) => {
             const count = player.resources[res_name] || 0;
             return (
               <div
@@ -98,7 +82,7 @@ export default function PlayerHUD({ player, isMe, isCurrentTurn }) {
                 className={`resource-card ${count === 0 ? 'empty' : ''}`}
                 title={`${label}: ${count}`}
               >
-                <img src={img} alt={label} className="res-card-img" />
+                <div className="res-card-icon" style={{ background: rc }}>{icon}</div>
                 <span className="res-card-count">{count}</span>
               </div>
             );
@@ -115,7 +99,7 @@ export default function PlayerHUD({ player, isMe, isCurrentTurn }) {
                 if (!info) return null;
                 return (
                   <div key={type} className="dev-card-thumb" title={info.label}>
-                    <img src={info.img} alt={info.label} className="dev-thumb-img" />
+                    <div className="dev-thumb-icon">{info.icon}</div>
                     {count > 1 && <span className="dev-thumb-count">×{count}</span>}
                   </div>
                 );
@@ -146,14 +130,10 @@ export default function PlayerHUD({ player, isMe, isCurrentTurn }) {
           <span title="Cities">🏰 {player.cities?.length || 0}</span>
           <span title="Roads">🛤 {player.roads?.length || 0}</span>
           {player.hasLongestRoad && (
-            <span className="special-badge" title="Longest Road">
-              <img src={longestRoadImg} alt="Longest Road" className="special-card-img" /> LR
-            </span>
+            <span className="special-badge" title="Longest Road">⛓ LR</span>
           )}
           {player.hasLargestArmy && (
-            <span className="special-badge" title="Largest Army">
-              <img src={largestArmyImg} alt="Largest Army" className="special-card-img" /> LA
-            </span>
+            <span className="special-badge" title="Largest Army">⚔ LA</span>
           )}
           {player.knightsPlayed > 0 && (
             <span title="Knights played">⚔ ×{player.knightsPlayed}</span>
