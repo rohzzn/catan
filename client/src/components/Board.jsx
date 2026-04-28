@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 
 const SQRT3 = Math.sqrt(3);
 
@@ -154,28 +154,38 @@ function PortSign({ p1, p2, mx, my, nx, ny, portType }) {
 }
 
 // ─── Building shapes ─────────────────────────────────────────────────────────
-function Settlement({ x, y, color }) {
+function Settlement({ x, y, color, isNew }) {
   const f = PLAYER_FILL[color]   || '#888';
   const s = PLAYER_STROKE[color] || '#444';
   return (
-    <g transform={`translate(${x},${y})`}>
-      <polygon points="0,-24 -13,-6 13,-6" fill={f} stroke={s} strokeWidth="2" />
-      <polygon points="-13,-6 13,-6 13,11 -13,11" fill={f} stroke={s} strokeWidth="2" />
-      <rect x="-4" y="1" width="8" height="10" fill={s} opacity="0.5" rx="1" />
+    <g
+      className={isNew ? 'piece-scale-in' : undefined}
+      style={isNew ? { transformOrigin: `${x}px ${y}px` } : undefined}
+    >
+      <g transform={`translate(${x},${y})`}>
+        <polygon points="0,-24 -13,-6 13,-6" fill={f} stroke={s} strokeWidth="2" />
+        <polygon points="-13,-6 13,-6 13,11 -13,11" fill={f} stroke={s} strokeWidth="2" />
+        <rect x="-4" y="1" width="8" height="10" fill={s} opacity="0.5" rx="1" />
+      </g>
     </g>
   );
 }
 
-function City({ x, y, color }) {
+function City({ x, y, color, isNew }) {
   const f = PLAYER_FILL[color]   || '#888';
   const s = PLAYER_STROKE[color] || '#444';
   return (
-    <g transform={`translate(${x},${y})`}>
-      <rect x="-16" y="-2" width="32" height="14" fill={f} stroke={s} strokeWidth="2" rx="1" />
-      <rect x="-16" y="-12" width="15" height="10" fill={f} stroke={s} strokeWidth="2" rx="1" />
-      <polygon points="-16,-12 -8,-22 0,-12" fill={f} stroke={s} strokeWidth="2" />
-      <polygon points="6,-2 16,-12 26,-2" fill={f} stroke={s} strokeWidth="2" />
-      <rect x="-5" y="3" width="10" height="9" fill={s} opacity="0.5" rx="1" />
+    <g
+      className={isNew ? 'piece-scale-in' : undefined}
+      style={isNew ? { transformOrigin: `${x}px ${y}px` } : undefined}
+    >
+      <g transform={`translate(${x},${y})`}>
+        <rect x="-16" y="-2" width="32" height="14" fill={f} stroke={s} strokeWidth="2" rx="1" />
+        <rect x="-16" y="-12" width="15" height="10" fill={f} stroke={s} strokeWidth="2" rx="1" />
+        <polygon points="-16,-12 -8,-22 0,-12" fill={f} stroke={s} strokeWidth="2" />
+        <polygon points="6,-2 16,-12 26,-2" fill={f} stroke={s} strokeWidth="2" />
+        <rect x="-5" y="3" width="10" height="9" fill={s} opacity="0.5" rx="1" />
+      </g>
     </g>
   );
 }
@@ -185,7 +195,7 @@ export default function Board({
   board, players, currentPlayerIndex, myIndex,
   phase, setupAction, mustMoveRobber,
   onVertexClick, onEdgeClick, onTileClick,
-  buildMode, freeRoads,
+  buildMode, freeRoads, diceValues,
 }) {
   const [hoveredVertex, setHoveredVertex] = useState(null);
   const [hoveredEdge,   setHoveredEdge]   = useState(null);
@@ -286,6 +296,67 @@ export default function Board({
     return markers;
   }, [board]);
 
+  // ─── Tile flash on dice roll ─────────────────────────────────────────────
+  const prevDiceRef = useRef(null);
+  const [flashNumber, setFlashNumber] = useState(null);
+  useEffect(() => {
+    if (!diceValues) { prevDiceRef.current = null; return; }
+    const prev = prevDiceRef.current;
+    if (prev && prev[0] === diceValues[0] && prev[1] === diceValues[1]) return;
+    prevDiceRef.current = [...diceValues];
+    const sum = diceValues[0] + diceValues[1];
+    if (sum === 7) return; // robber — no tile produces resources
+    setFlashNumber(sum);
+    const t = setTimeout(() => setFlashNumber(null), 1800);
+    return () => clearTimeout(t);
+  }, [diceValues?.[0], diceValues?.[1]]);
+
+  // ─── Piece scale-in on placement ─────────────────────────────────────────
+  const boardStateRef = useRef(null);
+  const [newVertices, setNewVertices] = useState(new Set());
+  const [newEdges,    setNewEdges]    = useState(new Set());
+  useEffect(() => {
+    if (!board) return;
+    if (boardStateRef.current === null) {
+      boardStateRef.current = { v: {}, e: {} };
+      for (const [id, v] of Object.entries(board.vertices))
+        boardStateRef.current.v[id] = v.building;
+      for (const [id, e] of Object.entries(board.edges))
+        if (e.road !== null) boardStateRef.current.e[id] = e.road;
+      return;
+    }
+    const addedV = new Set();
+    const addedE = new Set();
+    for (const [id, v] of Object.entries(board.vertices)) {
+      if (v.building && v.building !== boardStateRef.current.v[id]) addedV.add(id);
+      boardStateRef.current.v[id] = v.building;
+    }
+    for (const [id, e] of Object.entries(board.edges)) {
+      if (e.road !== null && boardStateRef.current.e[id] === undefined) addedE.add(id);
+      if (e.road !== null) boardStateRef.current.e[id] = e.road;
+    }
+    if (!addedV.size && !addedE.size) return;
+    setNewVertices(addedV);
+    setNewEdges(addedE);
+    const t = setTimeout(() => { setNewVertices(new Set()); setNewEdges(new Set()); }, 450);
+    return () => clearTimeout(t);
+  }, [board]);
+
+  // ─── Robber tile fade transition ─────────────────────────────────────────
+  const prevRobberRef = useRef(undefined);
+  const [fadingRobberTile, setFadingRobberTile] = useState(null);
+  useEffect(() => {
+    if (!board) return;
+    const curr = board.robberTile;
+    if (prevRobberRef.current === undefined) { prevRobberRef.current = curr; return; }
+    if (curr === prevRobberRef.current) return;
+    const prev = prevRobberRef.current;
+    prevRobberRef.current = curr;
+    setFadingRobberTile(prev);
+    const t = setTimeout(() => setFadingRobberTile(null), 500);
+    return () => clearTimeout(t);
+  }, [board?.robberTile]);
+
   if (!board) return null;
   const { tiles, vertices, edges, robberTile } = board;
 
@@ -336,10 +407,12 @@ export default function Board({
               strokeWidth="2.5"
             />
 
-            {/* Robber overlay */}
+            {/* Robber overlay — fade in/out */}
             {hasRobber && (
-              <polygon points={hexPoints(sx, sy, CLIENT_SIZE)}
-                fill="rgba(0,0,0,0.30)" />
+              <polygon points={hexPoints(sx, sy, CLIENT_SIZE)} className="robber-overlay-enter" />
+            )}
+            {fadingRobberTile === tile.id && (
+              <polygon points={hexPoints(sx, sy, CLIENT_SIZE)} className="robber-overlay-exit" />
             )}
 
             {/* Robber-target highlight */}
@@ -350,6 +423,15 @@ export default function Board({
                 stroke={isHovered ? '#b83030' : 'rgba(184,48,48,0.50)'}
                 strokeWidth="2.5"
                 strokeDasharray={isHovered ? 'none' : '6,3'}
+              />
+            )}
+
+            {/* Dice-roll tile flash */}
+            {flashNumber && tile.number === flashNumber && !hasRobber && (
+              <polygon
+                key={`flash-${tile.id}-${flashNumber}`}
+                points={hexPoints(sx, sy, CLIENT_SIZE)}
+                className="tile-flash-overlay"
               />
             )}
 
@@ -373,8 +455,14 @@ export default function Board({
         const [p1, p2] = edge.vertexIds.map(vid => toScreen(vertices[vid].x, vertices[vid].y));
         const f = PLAYER_FILL[players[edge.road]?.color]   || '#888';
         const s = PLAYER_STROKE[players[edge.road]?.color] || '#444';
+        const isNew = newEdges.has(edge.id);
+        const midX  = (p1.x + p2.x) / 2;
+        const midY  = (p1.y + p2.y) / 2;
         return (
-          <g key={edge.id}>
+          <g key={edge.id}
+            className={isNew ? 'piece-scale-in' : undefined}
+            style={isNew ? { transformOrigin: `${midX}px ${midY}px` } : undefined}
+          >
             <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={s} strokeWidth="10" strokeLinecap="round" />
             <line x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} stroke={f} strokeWidth="7"  strokeLinecap="round" />
           </g>
@@ -411,9 +499,10 @@ export default function Board({
         const { x, y } = toScreen(v.x, v.y);
         const player = players[v.owner];
         if (!player) return null;
+        const isNew = newVertices.has(v.id);
         return v.building === 'settlement'
-          ? <Settlement key={v.id} x={x} y={y} color={player.color} />
-          : <City       key={v.id} x={x} y={y} color={player.color} />;
+          ? <Settlement key={v.id} x={x} y={y} color={player.color} isNew={isNew} />
+          : <City       key={v.id} x={x} y={y} color={player.color} isNew={isNew} />;
       })}
 
       {/* ── Valid vertex dots ─────────────────────────────────────────────── */}

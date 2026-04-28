@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TradeModal from './TradeModal.jsx';
 import DevCardModal from './DevCardModal.jsx';
 
@@ -22,7 +22,37 @@ const COST_DISPLAY = {
 
 export default function ActionPanel({ gameState, myIndex, onAction, buildMode, setBuildMode }) {
   const [tradeOpen, setTradeOpen] = useState(false);
-  const [devOpen, setDevOpen] = useState(false);
+  const [devOpen,   setDevOpen]   = useState(false);
+
+  // ── Trade banner slide animation ──────────────────────────────────────────
+  const [tradeVisible, setTradeVisible] = useState(false);
+  const [tradeHiding,  setTradeHiding]  = useState(false);
+  const hideTimerRef  = useRef(null);
+  const lastOfferRef  = useRef(null);
+
+  // Compute incomingTrade before early return (with null guards)
+  const tradeOffer    = gameState?.tradeOffer ?? null;
+  const incomingTrade = !!(
+    tradeOffer && myIndex !== null && myIndex !== -1 &&
+    tradeOffer.from !== myIndex &&
+    (tradeOffer.targetPlayer === null || tradeOffer.targetPlayer === myIndex)
+  );
+  if (incomingTrade) lastOfferRef.current = tradeOffer; // cache for hide animation
+
+  useEffect(() => {
+    if (incomingTrade) {
+      clearTimeout(hideTimerRef.current);
+      setTradeHiding(false);
+      setTradeVisible(true);
+    } else if (tradeVisible) {
+      setTradeHiding(true);
+      hideTimerRef.current = setTimeout(() => {
+        setTradeVisible(false);
+        setTradeHiding(false);
+      }, 280);
+    }
+    return () => clearTimeout(hideTimerRef.current);
+  }, [incomingTrade]);
 
   if (!gameState || myIndex === null) return null;
 
@@ -84,25 +114,20 @@ export default function ActionPanel({ gameState, myIndex, onAction, buildMode, s
 
   if (!isPlaying) return null;
 
-  // Incoming trade offer
-  const tradeOffer = gameState.tradeOffer;
-  const incomingTrade = tradeOffer && tradeOffer.from !== myIndex &&
-    (tradeOffer.targetPlayer === null || tradeOffer.targetPlayer === myIndex);
-
   return (
     <div className="action-panel">
-      {/* Incoming trade offer banner */}
-      {incomingTrade && (
-        <div className="trade-offer-banner">
+      {/* Incoming trade offer banner — animated slide in/out */}
+      {tradeVisible && lastOfferRef.current && (
+        <div className={`trade-offer-banner${tradeHiding ? ' hiding' : ''}`}>
           <div className="trade-offer-text">
-            <strong>{gameState.players[tradeOffer.from]?.name}</strong> offers a trade!
+            <strong>{gameState.players[lastOfferRef.current.from]?.name}</strong> offers a trade!
           </div>
           <div className="trade-offer-details">
             <span className="trade-gives">
-              Gives: {Object.entries(tradeOffer.offer).filter(([,n])=>n>0).map(([r,n])=>`${n}×${r}`).join(', ')}
+              Gives: {Object.entries(lastOfferRef.current.offer).filter(([,n])=>n>0).map(([r,n])=>`${n}×${r}`).join(', ')}
             </span>
             <span className="trade-wants">
-              Wants: {Object.entries(tradeOffer.request).filter(([,n])=>n>0).map(([r,n])=>`${n}×${r}`).join(', ')}
+              Wants: {Object.entries(lastOfferRef.current.request).filter(([,n])=>n>0).map(([r,n])=>`${n}×${r}`).join(', ')}
             </span>
           </div>
           <div className="trade-offer-btns">

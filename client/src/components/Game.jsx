@@ -256,6 +256,7 @@ export default function Game({ gameState, playerId, roomCode, onAction, onStart,
           onTileClick={handleTileClick}
           buildMode={buildMode}
           freeRoads={freeRoads}
+          diceValues={diceValues}
         />
 
         {/* Turn indicator */}
